@@ -5,6 +5,7 @@ from .player import Player
 from .pendulum import PendulumChain
 from .menu import MainMenu
 from .enemy import Enemy
+from .wall import Wall
 
 class Game:
     def __init__(self):
@@ -28,6 +29,12 @@ class Game:
         self.pendulum = PendulumChain(
             self.physics_world.space,
             self.player.body
+        )
+
+        self.wall = Wall(
+            self.physics_world.space,
+            self.screen.get_width(),
+            self.screen.get_height()
         )
 
         self.enemy_list = []
@@ -97,6 +104,7 @@ class Game:
                 for enemy in self.enemy_list:
                     enemy.draw(self.screen)
                 self.pendulum.draw(self.screen)
+                self.wall.draw(self.screen)
                 
 
 
