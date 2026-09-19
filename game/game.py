@@ -18,6 +18,9 @@ class Game:
         self.running = True
         self.dt = 0
 
+        self.enemy_spawn_timer = 0
+        self.enemy_spawn_interval = 2.0
+
         self.physics_world = PhysicsWorld()
 
         self.player = Player(
@@ -83,13 +86,15 @@ class Game:
             if self.state == "menu":
                 self.menu.draw()
             elif self.state == "game":
-
+                self.enemy_spawn_timer += self.dt
                 # Enemy spawner 
-                if len(self.enemy_list) < 5 and pygame.time.get_ticks() % 10000 == 0: # 10000 ms = 10 seconds
+                if len(self.enemy_list) < 5 and self.enemy_spawn_timer >= self.enemy_spawn_interval:
+                    self.enemy_spawn_timer = 0
+                    print("Spawning enemy")
                     enemy = Enemy(
                         self.physics_world.space,
-                        self.screen.get_width() * 0.1,
-                        self.screen.get_height() * 0.1
+                        self.screen.get_width() * 0.5,
+                        self.screen.get_height() * 0.5
                     )
                     self.enemy_list.append(enemy)
 

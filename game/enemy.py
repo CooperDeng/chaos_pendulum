@@ -27,7 +27,7 @@ class Enemy:
         if direction.length > 0:
             direction = direction.normalized()
 
-        force = direction * 300
+        force = direction * 1000
         self.body.apply_force_at_local_point(force, (0, 0))
 
     def draw(self, screen):
