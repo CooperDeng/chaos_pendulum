@@ -3,7 +3,7 @@ import pygame
 from .physics import PhysicsWorld
 from .player import Player
 from .pendulum import PendulumChain
-
+from .menu import MainMenu
 
 class Game:
     def __init__(self):
@@ -47,6 +47,9 @@ class Game:
             radius=16
         )
 
+        self.state = "menu"  # Possible states: "menu", "game"
+        self.menu = MainMenu(self.screen)
+        
     def run(self):
         while self.running:
             # Cap the frame rate to 60
@@ -55,19 +58,30 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    
+                if self.state == "menu":
+                    result = self.menu.handle_event(event)
+                    
+                    if result == "play":
+                        self.state = "game"
+                    elif result == "exit":
+                        self.running = False
 
-            # Update player position
-            self.player.update()
-
-            self.physics_world.update(self.dt)
+            
+            
 
             # Clear the screen
             self.screen.fill("black")
-
-            # Draw the player as a circle
-            self.player.draw(self.screen)
-
-            self.pendulum.draw(self.screen)
+            if self.state == "menu":
+                self.menu.draw()
+            elif self.state == "game":
+                # Update player position
+                self.player.update()
+                self.physics_world.update(self.dt)
+                
+                # Draw the player as a circle
+                self.player.draw(self.screen)
+                self.pendulum.draw(self.screen)
 
             # Update the display
             pygame.display.flip()
