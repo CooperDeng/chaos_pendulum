@@ -4,13 +4,14 @@ from .physics import PhysicsWorld
 from .player import Player
 from .pendulum import PendulumChain
 from .menu import MainMenu
+from .enemy import Enemy
 
 class Game:
     def __init__(self):
         # Initialize pygame
         pygame.init()
-        self.screen_width = 1280
-        self.screen_height = 720
+        self.screen_width = 1920
+        self.screen_height = 1080
         self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         self.clock = pygame.time.Clock()
         self.running = True
@@ -27,6 +28,12 @@ class Game:
         self.pendulum = PendulumChain(
             self.physics_world.space,
             self.player.body
+        )
+
+        self.sample_enemy = Enemy(
+            self.physics_world.space,
+            self.screen.get_width() / 2 + 200,
+            self.screen.get_height() / 2 + 200
         )
 
         self.pendulum.add_link(
@@ -75,13 +82,30 @@ class Game:
             if self.state == "menu":
                 self.menu.draw()
             elif self.state == "game":
-                # Update player position
+                # Update
                 self.player.update()
+                self.sample_enemy.update(self.player.body.position)
                 self.physics_world.update(self.dt)
                 
-                # Draw the player as a circle
+                # Draw 
                 self.player.draw(self.screen)
+                self.sample_enemy.draw(self.screen)
                 self.pendulum.draw(self.screen)
+                
+
+
+                # Update player health on top of screen as a really thin line
+                player_health_ratio = self.player.health / self.player.max_health
+
+                health_bar_height = 3
+
+                pygame.draw.rect(
+                    self.screen,
+                    (255, 0, 0),
+                    (0, self.screen_height - health_bar_height, self.screen.get_width() * player_health_ratio, 
+                    health_bar_height)
+                )
+
 
             # Update the display
             pygame.display.flip()

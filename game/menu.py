@@ -5,14 +5,13 @@ import pygame
 class MainMenu:
     def __init__(self, screen):
         self.screen = screen
-
         self.title_font = pygame.font.SysFont(
-            "menlo",
+            "bahnschrift",
             64
         )
 
         self.button_font = pygame.font.SysFont(
-            "menlo",
+            "bahnschrift",
             28
         )
 
@@ -47,7 +46,7 @@ class MainMenu:
         mouse_pos = pygame.mouse.get_pos()
 
         title = self.title_font.render(
-            "CHAOS PENDULUM",
+            "chaos_pendulum",
             True,
             self.title_color
         )
@@ -69,13 +68,13 @@ class MainMenu:
             exit_color = self.hover_color
 
         play = self.button_font.render(
-            "PLAY",
+            "play",
             True,
             play_color
         )
 
         exit_button = self.button_font.render(
-            "EXIT",
+            "exit",
             True,
             exit_color
         )
