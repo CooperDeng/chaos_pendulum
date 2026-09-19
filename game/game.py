@@ -19,7 +19,7 @@ class Game:
         self.dt = 0
 
         self.enemy_spawn_timer = 0
-        self.enemy_spawn_interval = 2.0
+        self.enemy_spawn_interval = 10.0
 
         self.physics_world = PhysicsWorld()
 
