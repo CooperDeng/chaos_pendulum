@@ -1,5 +1,6 @@
 import pygame
 
+from . import constants
 from .physics import PhysicsWorld
 from .player import Player
 from .pendulum import PendulumChain
@@ -19,7 +20,6 @@ class Game:
         self.dt = 0
 
         self.enemy_spawn_timer = 0
-        self.enemy_spawn_interval = 10.0
 
         self.physics_world = PhysicsWorld()
 
@@ -65,8 +65,8 @@ class Game:
         
     def run(self):
         while self.running:
-            # Cap the frame rate to 60
-            self.dt = self.clock.tick(60) / 1000.0
+            # Cap the frame rate to MAX_FRAMERATE
+            self.dt = self.clock.tick(constants.MAX_FRAMERATE) / 1000.0
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -88,13 +88,13 @@ class Game:
             elif self.state == "game":
                 self.enemy_spawn_timer += self.dt
                 # Enemy spawner 
-                if len(self.enemy_list) < 5 and self.enemy_spawn_timer >= self.enemy_spawn_interval:
+                if len(self.enemy_list) < constants.MAX_ENEMIES and self.enemy_spawn_timer >= constants.ENEMY_SPAWN_INTERVAL:
                     self.enemy_spawn_timer = 0
                     print("Spawning enemy")
                     enemy = Enemy(
                         self.physics_world.space,
-                        self.screen.get_width() * 0.5,
-                        self.screen.get_height() * 0.5
+                        self.screen.get_width() * 0.2,
+                        self.screen.get_height() * 0.2
                     )
                     self.enemy_list.append(enemy)
 
