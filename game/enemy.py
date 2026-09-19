@@ -3,7 +3,8 @@ import pygame.gfxdraw
 import pymunk
 
 class Enemy:
-    def __init__(self, space, x, y):
+    def __init__(self, space, x, y, name="Enemy"):
+        self.name = name
         self.mass = 10
         self.radius = 20
 
@@ -49,5 +50,8 @@ class Enemy:
             self.color
         )
 
-    def death(self, space):
-        space.remove(self.body, self.shape)
+    def __del__(self):
+        # Ensure that the body and shape are removed from the space when the enemy is deleted
+        print("Deleting enemy:", self.name)
+        if self.body and self.shape:
+            self.body.space.remove(self.body, self.shape)

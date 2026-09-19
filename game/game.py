@@ -30,11 +30,7 @@ class Game:
             self.player.body
         )
 
-        self.sample_enemy = Enemy(
-            self.physics_world.space,
-            self.screen.get_width() / 2 + 200,
-            self.screen.get_height() / 2 + 200
-        )
+        self.enemy_list = []
 
         self.pendulum.add_link(
             (
@@ -73,8 +69,6 @@ class Game:
                         self.state = "game"
                     elif result == "exit":
                         self.running = False
-
-            
             
 
             # Clear the screen
@@ -82,14 +76,26 @@ class Game:
             if self.state == "menu":
                 self.menu.draw()
             elif self.state == "game":
+
+                # Enemy spawner 
+                if len(self.enemy_list) < 5 and pygame.time.get_ticks() % 10000 == 0: # 10000 ms = 10 seconds
+                    enemy = Enemy(
+                        self.physics_world.space,
+                        self.screen.get_width() * 0.1,
+                        self.screen.get_height() * 0.1
+                    )
+                    self.enemy_list.append(enemy)
+
                 # Update
                 self.player.update()
-                self.sample_enemy.update(self.player.body.position)
+                for enemy in self.enemy_list:
+                    enemy.update(self.player.body.position)
                 self.physics_world.update(self.dt)
                 
                 # Draw 
                 self.player.draw(self.screen)
-                self.sample_enemy.draw(self.screen)
+                for enemy in self.enemy_list:
+                    enemy.draw(self.screen)
                 self.pendulum.draw(self.screen)
                 
 
